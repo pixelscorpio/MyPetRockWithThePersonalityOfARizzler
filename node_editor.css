@@ -1,0 +1,359 @@
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111318;
+}
+
+/* =========================
+   BOARD
+========================= */
+
+.boardWrapper {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.board {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+
+    width: 200%;
+    height: 200%;
+
+    min-width: 6000px;
+    min-height: 6000px;
+
+    transform-origin: 0 0;
+
+    background-color: #111318;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+    background-size: 28px 28px;
+}
+
+.boardGrabbing {
+    cursor: grabbing;
+}
+
+/* =========================
+   NODES
+========================= */
+
+.boardWrapper .node {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+
+    cursor: grab;
+    user-select: none;
+    z-index: 1;
+
+    width: 180px;
+    min-height: 90px;
+
+    background: #1b1f27;
+    color: #e6e6e6;
+
+    border: 1px solid #2f3542;
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+
+    overflow: hidden;
+
+    transition:
+        border 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.1s ease;
+
+    font-size: small;
+}
+
+.boardWrapper .message-header {
+    padding: 10px 12px;
+
+    background: linear-gradient(
+        to bottom,
+        #2b3240,
+        #242a35
+    );
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #363d4d;
+}
+
+.boardWrapper .node .message-body {
+    padding: 14px;
+    color: #c8d0dd;
+}
+
+/* NODE TYPES */
+
+.boardWrapper .node.node-input {
+    background: #1b1f27;
+}
+
+.boardWrapper .node.node-input .message-header {
+    background: linear-gradient(to bottom, #355c9c, #28497f);
+}
+
+.boardWrapper .node.node-output {
+    background: #1b1f27;
+}
+
+.boardWrapper .node.node-output .message-header {
+    background: linear-gradient(to bottom, #2d8b7f, #21675e);
+}
+
+.boardWrapper .node.node-color {
+    background: #1b1f27;
+}
+
+.boardWrapper .node.node-color .message-header {
+    background: linear-gradient(to bottom, #6b5ca5, #51437f);
+}
+
+/* HOVER */
+
+.boardWrapper .node:hover {
+    border-color: #4f8cff;
+
+    box-shadow:
+        0 0 0 1px rgba(79,140,255,0.3),
+        0 8px 24px rgba(0,0,0,0.45);
+}
+
+/* SELECTED */
+
+.boardWrapper .nodeSelected {
+    border: 1px solid #5ea2ff;
+
+    box-shadow:
+        0 0 0 2px rgba(94,162,255,0.45),
+        0 0 18px rgba(94,162,255,0.25),
+        0 10px 28px rgba(0,0,0,0.45);
+}
+
+.boardWrapper .nodeSelected:hover {
+    box-shadow:
+        0 0 0 2px rgba(94,162,255,0.45),
+        0 0 20px rgba(94,162,255,0.35),
+        0 12px 30px rgba(0,0,0,0.5);
+}
+
+/* =========================
+   SOCKETS
+========================= */
+
+.boardWrapper .inputsWrapper {
+    position: absolute;
+    top: 11px;
+    left: -7px;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    width: 12px;
+
+    pointer-events: none;
+}
+
+.boardWrapper .outputsWrapper {
+    position: absolute;
+    top: 11px;
+    right: -7px;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+    width: 12px;
+
+    pointer-events: none;
+}
+
+.boardWrapper .inputNode,
+.boardWrapper .outputNode {
+    width: 20px;
+    height: 20px;
+
+    cursor: crosshair;
+
+    pointer-events: all;
+}
+
+.boardWrapper .inputNode:before,
+.boardWrapper .outputNode:before {
+
+    content: '';
+
+    display: inline-block;
+
+    width: 14px;
+    height: 14px;
+
+    margin: 2px;
+
+    border-radius: 50%;
+
+    background: #67a8ff;
+
+    border: 2px solid #d7e7ff;
+
+    box-shadow:
+        0 0 10px rgba(103,168,255,0.7);
+
+    transition: transform 0.1s ease;
+}
+
+.boardWrapper .inputNode:hover:before,
+.boardWrapper .outputNode:hover:before {
+    transform: scale(1.15);
+}
+
+.boardWrapper .inputNode.disabled:before,
+.boardWrapper .outputNode.disabled:before {
+    opacity: 0.3;
+}
+
+.boardWrapper .outputNode:hover:before,
+.boardWrapper .inputNode:hover:before {
+    border: 2px solid #ffffff;
+}
+
+.boardWrapper .outputNode.disabled:hover:before,
+.boardWrapper .inputNode.disabled:hover:before {
+    border: 2px solid #d7e7ff;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.boardWrapper .node select,
+.boardWrapper .node input {
+    font-size: small;
+
+    background: #12161d;
+    color: white;
+
+    border: 1px solid #343c4d;
+    border-radius: 6px;
+
+    padding: 0.4em 0.6em;
+    margin: 0;
+}
+
+.boardWrapper .node input[type=color] {
+    height: 30px;
+    padding: 0.1em 0.2em;
+}
+
+/* =========================
+   EDGES
+========================= */
+
+.edgeWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+}
+
+.edgeWrapper .delete {
+    cursor: pointer;
+    pointer-events: all;
+    transition: all ease 0.1s;
+}
+
+.edgeWrapper .deleteHidden {
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+    transition: all ease 0.1s;
+}
+
+.edgeWrapper .icon {
+    width: 16px;
+    height: 16px;
+
+    background-color: white;
+    fill: white;
+}
+
+.edgeWrapper .circle {
+    cx: 0;
+    cy: 0;
+    r: 11;
+
+    fill: rgb(59, 115, 175);
+}
+
+.edgeWrapper .edge {
+    pointer-events: all;
+
+    stroke: rgba(103,168,255,0.75);
+    stroke-width: 3;
+
+    fill: transparent;
+
+    cursor: pointer;
+}
+
+.edgeWrapper .edgeSelected {
+    pointer-events: all;
+
+    stroke: #9ec8ff;
+    stroke-width: 4;
+
+    fill: transparent;
+
+    z-index: 100;
+}
+
+.edgeWrapper .edgeNew {
+    stroke: rgba(103,168,255,0.35);
+    stroke-width: 3;
+    fill: transparent;
+}
+
+/* =========================
+   SELECTION
+========================= */
+
+.selection-area {
+    background: rgba(94,162,255,0.15);
+    border: 2px solid rgba(94,162,255,0.7);
+    border-radius: 0.2em;
+}
